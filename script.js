@@ -1,5 +1,5 @@
-const CLIENT_ID = "TU_CLIENT_ID.apps.googleusercontent.com"; // Reemplaza con tu Client ID
-const API_KEY = "TU_API_KEY"; // Reemplaza con tu API Key
+const CLIENT_ID = "757492209460-bdrra2bbdjnaar1lhlcj68q8dqcbksma.apps.googleusercontent.com"; // Reemplaza con tu Client ID
+const API_KEY = "AIzaSyBWtpeEFdIHMkp5kHAUd18isMFSMq2r8CE"; // Reemplaza con tu API Key
 const SHEET_ID = "1d-xYuOKUTuqvlQoJtNiKcuv5iK_4L7Kt2RMayUB8e08"; // Reemplaza con tu ID de hoja
 const DISCOVERY_DOC = "https://sheets.googleapis.com/$discovery/rest?version=v4";
 const SCOPES = "https://www.googleapis.com/auth/spreadsheets";
