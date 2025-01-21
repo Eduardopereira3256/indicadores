@@ -54,7 +54,7 @@
     <input type="number" id="valor" placeholder="Valor Acumulado" />
     <input type="number" id="porcentaje" placeholder="% Acumulado" />
     <input type="number" id="meta" placeholder="Meta" />
-    <button id="btn-agregar">Agregar</button>
+    <button id="btn-agregar" disabled>Agregar</button>
   </div>
 
   <div>
@@ -77,6 +77,9 @@
     </table>
   </div>
 
+  <!-- Scripts -->
+  <script src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer onload="gisLoaded()"></script>
   <script src="script.js"></script>
 </body>
 </html>
