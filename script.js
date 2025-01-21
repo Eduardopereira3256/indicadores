@@ -1,41 +1,81 @@
-// Configuración de la API
-const GOOGLE_SHEET_ID = "1d-xYuOKUTuqvlQoJtNiKcuv5iK_4L7Kt2RMayUB8e08"; // Tu ID de hoja
-const API_KEY = "AIzaSyBWtpeEFdIHMkp5kHAUd18isMFSMq2r8CE"; // Tu clave de API
-const ACCESS_TOKEN = "TU_ACCESS_TOKEN"; // Necesitarás un token OAuth para escribir en la hoja
+const CLIENT_ID = "TU_CLIENT_ID.apps.googleusercontent.com"; // Reemplaza con tu Client ID
+const API_KEY = "TU_API_KEY"; // Reemplaza con tu API Key
+const SHEET_ID = "1d-xYuOKUTuqvlQoJtNiKcuv5iK_4L7Kt2RMayUB8e08"; // Reemplaza con tu ID de hoja
+const DISCOVERY_DOC = "https://sheets.googleapis.com/$discovery/rest?version=v4";
+const SCOPES = "https://www.googleapis.com/auth/spreadsheets";
 
-// URL base para la API
-const API_URL = `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}/values/Hoja%201:append?valueInputOption=USER_ENTERED`;
+// Botones y elementos
+const authorizeButton = document.getElementById("authorize_button");
+const signoutButton = document.getElementById("signout_button");
+const formulario = document.getElementById("miFormulario");
 
-// Función para agregar datos a Google Sheets
-async function agregarDatos(nuevosDatos) {
-  try {
-    const respuesta = await fetch(API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${ACCESS_TOKEN}`, // Se necesita autenticación OAuth
-      },
-      body: JSON.stringify({
-        values: [nuevosDatos], // Datos que se enviarán como nueva fila
-      }),
-    });
+let token;
 
-    if (!respuesta.ok) {
-      throw new Error(`Error al agregar datos: ${respuesta.statusText}`);
-    }
+function handleClientLoad() {
+  gapi.load("client:auth2", initClient);
+}
 
-    const datos = await respuesta.json();
-    console.log("Datos agregados correctamente:", datos);
-  } catch (error) {
-    console.error("Error al agregar datos:", error);
+async function initClient() {
+  await gapi.client.init({
+    apiKey: API_KEY,
+    clientId: CLIENT_ID,
+    discoveryDocs: [DISCOVERY_DOC],
+    scope: SCOPES,
+  });
+
+  const GoogleAuth = gapi.auth2.getAuthInstance();
+
+  GoogleAuth.isSignedIn.listen(updateSigninStatus);
+  updateSigninStatus(GoogleAuth.isSignedIn.get());
+
+  authorizeButton.onclick = () => GoogleAuth.signIn();
+  signoutButton.onclick = () => GoogleAuth.signOut();
+}
+
+function updateSigninStatus(isSignedIn) {
+  if (isSignedIn) {
+    authorizeButton.style.display = "none";
+    signoutButton.style.display = "block";
+    token = gapi.auth.getToken().access_token;
+    console.log("Token obtenido:", token);
+  } else {
+    authorizeButton.style.display = "block";
+    signoutButton.style.display = "none";
   }
 }
 
-// Ejemplo: Llamada a la función al enviar el formulario
-document.querySelector("#miFormulario").addEventListener("submit", (event) => {
+async function agregarDatos(datos) {
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Hoja%201:append?valueInputOption=USER_ENTERED`;
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Usa el token para autenticarte
+      },
+      body: JSON.stringify({
+        values: [datos], // Los datos a agregar
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error al agregar datos: ${response.status}`);
+    }
+
+    const result = await response.json();
+    console.log("Datos agregados exitosamente:", result);
+    document.getElementById("output").innerText = "Datos agregados exitosamente";
+  } catch (error) {
+    console.error("Error:", error);
+    document.getElementById("output").innerText = "Error al agregar datos";
+  }
+}
+
+// Manejar el envío del formulario
+formulario.addEventListener("submit", (event) => {
   event.preventDefault();
 
-  // Recoger los datos del formulario
   const id = document.querySelector("#id").value;
   const nombreIndicador = document.querySelector("#nombreIndicador").value;
   const trazadora = document.querySelector("#trazadora").value;
@@ -44,6 +84,8 @@ document.querySelector("#miFormulario").addEventListener("submit", (event) => {
   const porcentajeAcumulado = document.querySelector("#porcentajeAcumulado").value;
   const meta = document.querySelector("#meta").value;
 
-  // Llamar a la función con los datos del formulario
   agregarDatos([id, nombreIndicador, trazadora, mes, valorAcumulado, porcentajeAcumulado, meta]);
 });
+
+// Iniciar la carga del cliente
+handleClientLoad();
