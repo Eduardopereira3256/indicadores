@@ -1,76 +1,57 @@
-const CLIENT_ID = "757492209460-bdrra2bbdjnaar1lhlcj68q8dqcbksma.apps.googleusercontent.com"; // Reemplaza con tu Client ID
-const API_KEY = "AIzaSyBWtpeEFdIHMkp5kHAUd18isMFSMq2r8CE"; // Reemplaza con tu API Key
-const DISCOVERY_DOC = "https://sheets.googleapis.com/$discovery/rest?version=v4";
-const SCOPES = "https://www.googleapis.com/auth/spreadsheets";
+// ID de la hoja de Google Sheets y API Key (configúralo con tus datos)
+const SHEET_ID = 'TU_GOOGLE_SHEET_ID';
+const API_KEY = 'TU_GOOGLE_API_KEY';
+const SHEET_NAME = 'Hoja1';
 
-const SPREADSHEET_ID = "1d-xYuOKUTuqvlQoJtNiKcuv5iK_4L7Kt2RMayUB8e08"; // ID de tu hoja de Google Sheets
-const RANGE = "Hoja 1"; // Nombre de la hoja donde están los datos
-
-function handleClientLoad() {
-  gapi.load("client:auth2", initClient);
-}
-
-function initClient() {
-  gapi.client.init({
-    apiKey: API_KEY,
-    clientId: CLIENT_ID,
-    discoveryDocs: [DISCOVERY_DOC],
-    scope: SCOPES,
-  }).then(() => {
-    const GoogleAuth = gapi.auth2.getAuthInstance();
-
-    GoogleAuth.isSignedIn.listen(updateSigninStatus);
-    updateSigninStatus(GoogleAuth.isSignedIn.get());
-
-    document.getElementById("authorize_button").onclick = () => GoogleAuth.signIn();
-    document.getElementById("signout_button").onclick = () => GoogleAuth.signOut();
-
-    document.getElementById("indicator-form").addEventListener("submit", addIndicator);
-  }).catch((error) => {
-    console.error("Error al inicializar el cliente:", error);
+// Función para cargar los datos desde Google Sheets
+async function cargarDatos() {
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  const rows = data.values.slice(1); // Excluir encabezados
+  const tbody = document.getElementById('tabla-indicadores').querySelector('tbody');
+  tbody.innerHTML = ''; // Limpiar tabla
+  rows.forEach(row => {
+    const tr = document.createElement('tr');
+    row.forEach(cell => {
+      const td = document.createElement('td');
+      td.textContent = cell;
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
   });
 }
 
-function updateSigninStatus(isSignedIn) {
-  if (isSignedIn) {
-    document.getElementById("authorize_button").style.display = "none";
-    document.getElementById("signout_button").style.display = "block";
-    loadIndicators();
-  } else {
-    document.getElementById("authorize_button").style.display = "block";
-    document.getElementById("signout_button").style.display = "none";
-  }
-}
+// Función para agregar un nuevo indicador
+async function agregarIndicador() {
+  const id = document.getElementById('id').value;
+  const nombre = document.getElementById('nombre').value;
+  const trazadora = document.getElementById('trazadora').value;
+  const mes = document.getElementById('mes').value;
+  const valor = document.getElementById('valor').value;
+  const porcentaje = document.getElementById('porcentaje').value;
+  const meta = document.getElementById('meta').value;
 
-function loadIndicators() {
-  gapi.client.sheets.spreadsheets.values.get({
-    spreadsheetId: SPREADSHEET_ID,
-    range: RANGE,
-  }).then((response) => {
-    const rows = response.result.values || [];
-    const container = document.getElementById("data-container");
-    container.innerHTML = rows.map(row => `<p>${row[0]}: ${row[1]}</p>`).join("");
-  }).catch((error) => {
-    console.error("Error al cargar los indicadores:", error);
+  const nuevoIndicador = [id, nombre, trazadora, mes, valor, porcentaje, meta];
+
+  // Actualizar la hoja de cálculo (requiere un servicio backend o autenticación avanzada)
+  console.log('Enviar datos a la hoja:', nuevoIndicador);
+
+  // Refrescar los datos (simulado)
+  const tbody = document.getElementById('tabla-indicadores').querySelector('tbody');
+  const tr = document.createElement('tr');
+  nuevoIndicador.forEach(cell => {
+    const td = document.createElement('td');
+    td.textContent = cell;
+    tr.appendChild(td);
   });
+  tbody.appendChild(tr);
+
+  // Limpiar los campos del formulario
+  document.querySelectorAll('.form-container input').forEach(input => input.value = '');
 }
 
-function addIndicator(event) {
-  event.preventDefault();
-  const nombre = document.getElementById("nombre").value;
-  const valor = document.getElementById("valor").value;
+document.getElementById('btn-agregar').addEventListener('click', agregarIndicador);
 
-  gapi.client.sheets.spreadsheets.values.append({
-    spreadsheetId: SPREADSHEET_ID,
-    range: RANGE,
-    valueInputOption: "RAW",
-    resource: {
-      values: [[nombre, valor]],
-    },
-  }).then(() => {
-    loadIndicators();
-    document.getElementById("indicator-form").reset();
-  }).catch((error) => {
-    console.error("Error al añadir el indicador:", error);
-  });
-}
+// Cargar datos al inicio
+cargarDatos();
