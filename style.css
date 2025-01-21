@@ -13,7 +13,7 @@ body {
 }
 
 .corner-logo img {
-  width: 150px; /* Ajustar el tamaño del logo */
+  width: 100px; /* Ajustar el tamaño del logo */
   max-width: 20%; /* Limitar el ancho máximo */
   height: auto;
 }
