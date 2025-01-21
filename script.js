@@ -1,11 +1,11 @@
 // ID de la hoja de Google Sheets y API Key (configúralo con tus datos)
-const SHEET_ID = 'TU_GOOGLE_SHEET_ID';
-const API_KEY = 'TU_GOOGLE_API_KEY';
-const SHEET_NAME = 'Hoja1';
+const SHEET_ID = '1d-xYuOKUTuqvlQoJtNiKcuv5iK_4L7Kt2RMayUB8e08';
+const API_KEY = 'AIzaSyBWtpeEFdIHMkp5kHAUd18isMFSMq2r8CE';
+const SHEET_NAME = 'bsl';
 
 // Función para cargar los datos desde Google Sheets
 async function cargarDatos() {
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`;
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/1d-xYuOKUTuqvlQoJtNiKcuv5iK_4L7Kt2RMayUB8e08/values/Hoja%201?key=AIzaSyBWtpeEFdIHMkp5kHAUd18isMFSMq2r8CE`;
   const response = await fetch(url);
   const data = await response.json();
   const rows = data.values.slice(1); // Excluir encabezados
