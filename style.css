@@ -1,0 +1,42 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  background-color: #f4f4f9;
+}
+
+h1 {
+  background-color: #007BFF;
+  color: white;
+  padding: 10px;
+}
+
+#menu {
+  margin: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+#content {
+  margin: 20px auto;
+  width: 80%;
+}
+
+#data-container {
+  margin-top: 20px;
+}
+
+form {
+  margin-top: 20px;
+}
+
+input {
+  padding: 10px;
+  margin: 5px;
+  width: 200px;
+}
