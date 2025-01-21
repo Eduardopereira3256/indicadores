@@ -1,7 +1,7 @@
 // ID de la hoja de Google Sheets y API Key (configúralo con tus datos)
 const SHEET_ID = '1d-xYuOKUTuqvlQoJtNiKcuv5iK_4L7Kt2RMayUB8e08';
 const API_KEY = 'AIzaSyBWtpeEFdIHMkp5kHAUd18isMFSMq2r8CE';
-const SHEET_NAME = 'bsl';
+const SHEET_NAME = 'Hoja 1';
 
 // Función para cargar los datos desde Google Sheets
 async function cargarDatos() {
