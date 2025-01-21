@@ -7,38 +7,43 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div>
-    <button id="balanceButton">BALANCE SCORE CARD</button>
-    <button id="fonasaButton">FONASA</button>
+  <div class="corner-logo">
+    <img src="https://www.hep.cl/wp-content/uploads/2021/05/logo-hep-300x88.png" alt="Logo" />
   </div>
-  <h2>Agregar Nuevo Indicador</h2>
-  <div>
-    <input type="text" id="id" placeholder="ID">
-    <input type="text" id="nombre" placeholder="Nombre del Indicador">
-    <input type="text" id="trazadora" placeholder="Trazadora">
-    <input type="text" id="mes" placeholder="Mes">
-    <input type="number" id="valor" placeholder="Valor Acumulado">
-    <input type="number" id="porcentaje" placeholder="% Acumulado">
-    <input type="text" id="meta" placeholder="Meta">
-    <button id="agregarButton">Agregar</button>
+  <div class="container">
+    <div class="buttons">
+      <button id="balanceButton">BALANCE SCORE CARD</button>
+      <button id="fonasaButton">FONASA</button>
+    </div>
+    <h2>Agregar Nuevo Indicador</h2>
+    <div class="form">
+      <input type="text" id="id" placeholder="ID">
+      <input type="text" id="nombre" placeholder="Nombre del Indicador">
+      <input type="text" id="trazadora" placeholder="Trazadora">
+      <input type="text" id="mes" placeholder="Mes">
+      <input type="number" id="valor" placeholder="Valor Acumulado">
+      <input type="number" id="porcentaje" placeholder="% Acumulado">
+      <input type="text" id="meta" placeholder="Meta">
+      <button id="agregarButton">Agregar</button>
+    </div>
+    <h2>Lista de Indicadores</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre del Indicador</th>
+          <th>Trazadora</th>
+          <th>Mes</th>
+          <th>Valor Acumulado</th>
+          <th>% Acumulado</th>
+          <th>Meta</th>
+        </tr>
+      </thead>
+      <tbody id="indicadoresTable">
+        <!-- Los indicadores serán añadidos aquí -->
+      </tbody>
+    </table>
   </div>
-  <h2>Lista de Indicadores</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nombre del Indicador</th>
-        <th>Trazadora</th>
-        <th>Mes</th>
-        <th>Valor Acumulado</th>
-        <th>% Acumulado</th>
-        <th>Meta</th>
-      </tr>
-    </thead>
-    <tbody id="indicadoresTable">
-      <!-- Los indicadores serán añadidos aquí -->
-    </tbody>
-  </table>
   <script src="app.js"></script>
 </body>
 </html>
