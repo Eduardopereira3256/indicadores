@@ -1,29 +1,33 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Google Sheets App</title>
+  <title>Indicadores</title>
+  <script src="https://apis.google.com/js/api.js" onload="handleClientLoad()"></script>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>Google Sheets Integration</h1>
-  <button id="authorize_button">Autorizar</button>
-  <button id="signout_button" style="display: none;">Cerrar sesión</button>
-  
-  <form id="miFormulario" style="margin-top: 20px;">
-    <input type="text" id="id" placeholder="ID" required />
-    <input type="text" id="nombreIndicador" placeholder="Nombre del Indicador" required />
-    <input type="text" id="trazadora" placeholder="Trazadora" required />
-    <input type="text" id="mes" placeholder="Mes" required />
-    <input type="number" id="valorAcumulado" placeholder="Valor Acumulado" required />
-    <input type="number" id="porcentajeAcumulado" placeholder="Porcentaje Acumulado" required />
-    <input type="number" id="meta" placeholder="Meta" required />
-    <button type="submit">Agregar Datos</button>
-  </form>
+  <h1>Indicadores</h1>
+  <div id="menu">
+    <button id="authorize_button" style="display: none;">Autorizar</button>
+    <button id="signout_button" style="display: none;">Cerrar Sesión</button>
+  </div>
 
-  <div id="output"></div>
-
-  <script src="https://apis.google.com/js/api.js"></script>
+  <div id="content">
+    <h2>Balance Score Card</h2>
+    <div id="data-container">
+      <!-- Aquí se mostrarán los indicadores -->
+    </div>
+    <div id="add-indicator">
+      <h3>Añadir Nuevo Indicador</h3>
+      <form id="indicator-form">
+        <input type="text" id="nombre" placeholder="Nombre del Indicador" required>
+        <input type="text" id="valor" placeholder="Valor del Indicador" required>
+        <button type="submit">Añadir</button>
+      </form>
+    </div>
+  </div>
   <script src="script.js"></script>
 </body>
 </html>
