@@ -1,57 +1,49 @@
-// ID de la hoja de Google Sheets y API Key (configúralo con tus datos)
-const SHEET_ID = '1d-xYuOKUTuqvlQoJtNiKcuv5iK_4L7Kt2RMayUB8e08';
-const API_KEY = 'AIzaSyBWtpeEFdIHMkp5kHAUd18isMFSMq2r8CE';
-const SHEET_NAME = 'Hoja1';
+// Configuración de la API
+const GOOGLE_SHEET_ID = "1d-xYuOKUTuqvlQoJtNiKcuv5iK_4L7Kt2RMayUB8e08"; // Tu ID de hoja
+const API_KEY = "AIzaSyBWtpeEFdIHMkp5kHAUd18isMFSMq2r8CE"; // Tu clave de API
+const ACCESS_TOKEN = "TU_ACCESS_TOKEN"; // Necesitarás un token OAuth para escribir en la hoja
 
-// Función para cargar los datos desde Google Sheets
-async function cargarDatos() {
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`;
-  const response = await fetch(url);
-  const data = await response.json();
-  const rows = data.values.slice(1); // Excluir encabezados
-  const tbody = document.getElementById('tabla-indicadores').querySelector('tbody');
-  tbody.innerHTML = ''; // Limpiar tabla
-  rows.forEach(row => {
-    const tr = document.createElement('tr');
-    row.forEach(cell => {
-      const td = document.createElement('td');
-      td.textContent = cell;
-      tr.appendChild(td);
+// URL base para la API
+const API_URL = `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}/values/Hoja%201:append?valueInputOption=USER_ENTERED`;
+
+// Función para agregar datos a Google Sheets
+async function agregarDatos(nuevosDatos) {
+  try {
+    const respuesta = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${ACCESS_TOKEN}`, // Se necesita autenticación OAuth
+      },
+      body: JSON.stringify({
+        values: [nuevosDatos], // Datos que se enviarán como nueva fila
+      }),
     });
-    tbody.appendChild(tr);
-  });
+
+    if (!respuesta.ok) {
+      throw new Error(`Error al agregar datos: ${respuesta.statusText}`);
+    }
+
+    const datos = await respuesta.json();
+    console.log("Datos agregados correctamente:", datos);
+  } catch (error) {
+    console.error("Error al agregar datos:", error);
+  }
 }
 
-// Función para agregar un nuevo indicador
-async function agregarIndicador() {
-  const id = document.getElementById('id').value;
-  const nombre = document.getElementById('nombre').value;
-  const trazadora = document.getElementById('trazadora').value;
-  const mes = document.getElementById('mes').value;
-  const valor = document.getElementById('valor').value;
-  const porcentaje = document.getElementById('porcentaje').value;
-  const meta = document.getElementById('meta').value;
+// Ejemplo: Llamada a la función al enviar el formulario
+document.querySelector("#miFormulario").addEventListener("submit", (event) => {
+  event.preventDefault();
 
-  const nuevoIndicador = [id, nombre, trazadora, mes, valor, porcentaje, meta];
+  // Recoger los datos del formulario
+  const id = document.querySelector("#id").value;
+  const nombreIndicador = document.querySelector("#nombreIndicador").value;
+  const trazadora = document.querySelector("#trazadora").value;
+  const mes = document.querySelector("#mes").value;
+  const valorAcumulado = document.querySelector("#valorAcumulado").value;
+  const porcentajeAcumulado = document.querySelector("#porcentajeAcumulado").value;
+  const meta = document.querySelector("#meta").value;
 
-  // Actualizar la hoja de cálculo (requiere un servicio backend o autenticación avanzada)
-  console.log('Enviar datos a la hoja:', nuevoIndicador);
-
-  // Refrescar los datos (simulado)
-  const tbody = document.getElementById('tabla-indicadores').querySelector('tbody');
-  const tr = document.createElement('tr');
-  nuevoIndicador.forEach(cell => {
-    const td = document.createElement('td');
-    td.textContent = cell;
-    tr.appendChild(td);
-  });
-  tbody.appendChild(tr);
-
-  // Limpiar los campos del formulario
-  document.querySelectorAll('.form-container input').forEach(input => input.value = '');
-}
-
-document.getElementById('btn-agregar').addEventListener('click', agregarIndicador);
-
-// Cargar datos al inicio
-cargarDatos();
+  // Llamar a la función con los datos del formulario
+  agregarDatos([id, nombreIndicador, trazadora, mes, valorAcumulado, porcentajeAcumulado, meta]);
+});
